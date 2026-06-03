@@ -221,7 +221,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
           }
         },
       ))
-      ..loadFlutterAsset('assets/web/index.html');
+      ..loadRequest(Uri.parse('https://pharma-arena.replit.app'));
   }
 
   void _reload() {
