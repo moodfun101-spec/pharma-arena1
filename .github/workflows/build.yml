@@ -21,14 +21,26 @@ jobs:
           flutter-version: '3.22.0'
           channel: 'stable'
 
+      - name: Check files
+        run: |
+          echo "=== Flutter project files ==="
+          ls pharma_arena_v2/pharma_flutter_v2/
+          echo "=== Assets ==="
+          ls pharma_arena_v2/pharma_flutter_v2/assets/ || echo "NO ASSETS FOLDER"
+          ls pharma_arena_v2/pharma_flutter_v2/assets/web/ || echo "NO WEB FOLDER"
+
       - name: Create local.properties
-        run: echo "flutter.sdk=$FLUTTER_ROOT" > pharma_arena_v2/pharma_flutter_v2/android/local.properties
+        run: |
+          echo "flutter.sdk=$FLUTTER_ROOT" > pharma_arena_v2/pharma_flutter_v2/android/local.properties
+          echo "sdk.dir=$ANDROID_HOME" >> pharma_arena_v2/pharma_flutter_v2/android/local.properties
 
       - name: Get dependencies
         run: cd pharma_arena_v2/pharma_flutter_v2 && flutter pub get
 
       - name: Build APK
-        run: cd pharma_arena_v2/pharma_flutter_v2 && flutter build apk --debug
+        run: |
+          cd pharma_arena_v2/pharma_flutter_v2
+          flutter build apk --debug --verbose 2>&1 | grep -E "error:|Error:|FAILED|Exception|warning:" | tail -50
 
       - uses: actions/upload-artifact@v4
         with:
