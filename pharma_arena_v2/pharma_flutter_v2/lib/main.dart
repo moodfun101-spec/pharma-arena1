@@ -175,7 +175,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
           }
         },
       ))
-      ..loadRequest(Uri.parse('https://pharma-arena.replit.app'));
+      ..loadRequest(Uri.parse('https://pharma-arena--moovcov1.replit.app'));
   }
 
   void _reload() {
