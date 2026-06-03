@@ -21,8 +21,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon.png
-    - assets/web/index.html
-    - assets/web/manifest.json
-    - assets/web/sw.js
-    - assets/web/icon-192.png
-    - assets/web/icon-512.png
