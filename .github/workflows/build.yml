@@ -21,20 +21,14 @@ jobs:
           flutter-version: '3.22.0'
           channel: 'stable'
 
-      - name: Show structure
-        run: find pharma_arena_v2 -type f -name "*.dart" -o -name "pubspec.yaml" | head -20
+      - name: Create local.properties
+        run: echo "flutter.sdk=$FLUTTER_ROOT" > pharma_arena_v2/pharma_flutter_v2/android/local.properties
 
       - name: Get dependencies
         run: cd pharma_arena_v2/pharma_flutter_v2 && flutter pub get
 
       - name: Build APK
-        run: |
-          set -e
-          cd pharma_arena_v2/pharma_flutter_v2
-          flutter build apk --debug
-
-      - name: Find APK
-        run: find . -name "*.apk" 2>/dev/null
+        run: cd pharma_arena_v2/pharma_flutter_v2 && flutter build apk --debug
 
       - uses: actions/upload-artifact@v4
         with:
