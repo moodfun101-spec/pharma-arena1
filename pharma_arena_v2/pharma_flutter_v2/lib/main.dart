@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Color(0xFF020817),
     statusBarIconBrightness: Brightness.light,
@@ -176,6 +176,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
         },
       ))
       ..loadRequest(Uri.parse('https://pharma-arena--moovcov1.replit.app'));
+
+    // تفعيل التخزين المحلي لحفظ تسجيل الدخول
+    final androidController =
+        _controller.platform as AndroidWebViewController;
+    androidController.setMediaPlaybackRequiresUserGesture(false);
+    AndroidWebViewController.enableDebugging(false);
   }
 
   void _reload() {
@@ -183,7 +189,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
       _loading = true;
       _error = false;
     });
-    _controller.loadRequest(Uri.parse('https://pharma-arena.replit.app'));
+    _controller
+        .loadRequest(Uri.parse('https://pharma-arena--moovcov1.replit.app'));
   }
 
   Future<bool> _onBack() async {
@@ -200,55 +207,58 @@ class _WebViewScreenState extends State<WebViewScreen> {
       onWillPop: _onBack,
       child: Scaffold(
         backgroundColor: const Color(0xFF020817),
-        body: Stack(
-          children: [
-            WebViewWidget(controller: _controller),
-            if (_loading)
-              Container(
-                color: const Color(0xFF020817),
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xFF1991FF),
-                    strokeWidth: 2.5,
+        body: SafeArea(
+          top: false,
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              if (_loading)
+                Container(
+                  color: const Color(0xFF020817),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF1991FF),
+                      strokeWidth: 2.5,
+                    ),
                   ),
                 ),
-              ),
-            if (_error)
-              Container(
-                color: const Color(0xFF020817),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.wifi_off_rounded,
-                          size: 48, color: Color(0xFF64748B)),
-                      const SizedBox(height: 16),
-                      const Text('No Connection',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 24),
-                      GestureDetector(
-                        onTap: _reload,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1991FF),
-                            borderRadius: BorderRadius.circular(14),
+              if (_error)
+                Container(
+                  color: const Color(0xFF020817),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.wifi_off_rounded,
+                            size: 48, color: Color(0xFF64748B)),
+                        const SizedBox(height: 16),
+                        const Text('No Connection',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 24),
+                        GestureDetector(
+                          onTap: _reload,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 14),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1991FF),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: const Text('Try Again',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600)),
                           ),
-                          child: const Text('Try Again',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
